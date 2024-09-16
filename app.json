@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "sali@latest",
+    "slug": "sali@latest",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.sali.fund"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "head": {
+        "metas": [
+          {
+            "name": "viewport",
+            "content": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          }
+        ],
+        "links": [
+          {
+            "rel": "stylesheet",
+            "href": "https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css"
+          }
+        ]
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

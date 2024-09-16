@@ -1,0 +1,912 @@
+ Certainly! I'll create a React Native/Expo implementation of the UI shown in the images. I'll break this down into separate components for better organization and reusability. Let's start with the main app structure and then dive into individual components.
+
+
+
+```
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import HomeScreen from './screens/HomeScreen';
+import DiscoverScreen from './screens/DiscoverScreen';
+import AddScreen from './screens/AddScreen';
+import AnalysisScreen from './screens/AnalysisScreen';
+import ProfileScreen from './screens/ProfileScreen';
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Home') {
+                iconName = focused ? 'home' : 'home-outline';
+              } else if (route.name === 'Discover') {
+                iconName = focused ? 'compass' : 'compass-outline';
+              } else if (route.name === 'Add') {
+                iconName = 'add-circle';
+                size = 40;
+                color = '#00b894';
+              } else if (route.name === 'Analysis') {
+                iconName = focused ? 'bar-chart' : 'bar-chart-outline';
+              } else if (route.name === 'Profile') {
+                iconName = focused ? 'person' : 'person-outline';
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#6c5ce7',
+            tabBarInactiveTintColor: 'gray',
+            tabBarShowLabel: true,
+            tabBarStyle: {
+              display: 'flex',
+            },
+          })}
+        >
+          <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+          <Tab.Screen name="Discover" component={DiscoverScreen} options={{ headerShown: false }} />
+          <Tab.Screen name="Add" component={AddScreen} options={{ headerShown: false }} />
+          <Tab.Screen name="Analysis" component={AnalysisScreen} options={{ headerShown: false }} />
+          <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
+}
+
+// HomeScreen.js
+import React from 'react';
+import { View, Text, Image, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+
+const HomeScreen = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://example.com/profile-pic.jpg' }}
+            style={styles.profilePic}
+          />
+          <View style={styles.headerText}>
+            <Text style={styles.welcomeText}>Hi, welcome back!</Text>
+            <Text style={styles.nameText}>John Amara</Text>
+          </View>
+          <View style={styles.headerIcons}>
+            <Ionicons name="chatbubble-outline" size={24} color="black" style={styles.icon} />
+            <Ionicons name="notifications-outline" size={24} color="black" style={styles.icon} />
+          </View>
+        </View>
+
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search pharmacy, drugs, coach..."
+          />
+        </View>
+
+        <View style={styles.fundingCard}>
+          <View>
+            <Text style={styles.fundingTitle}>Start a funding campaign.</Text>
+            <TouchableOpacity style={styles.startButton}>
+              <Text style={styles.startButtonText}>Start</Text>
+              <Ionicons name="arrow-forward" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={{ uri: 'https://example.com/funding-image.jpg' }}
+            style={styles.fundingImage}
+          />
+        </View>
+
+        <View style={styles.healthResources}>
+          <View style={styles.healthResourcesHeader}>
+            <Text style={styles.healthResourcesTitle}>Health Resources</Text>
+            <TouchableOpacity>
+              <Text style={styles.seeAllText}>See all</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.resourcesGrid}>
+            {['Pharmacy', 'Medicine', 'Exercises', 'Health Food'].map((item, index) => (
+              <TouchableOpacity key={index} style={styles.resourceItem}>
+                <View style={styles.resourceIcon}>
+                  <Ionicons name="medical" size={24} color="#6c5ce7" />
+                </View>
+                <Text style={styles.resourceText}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+  },
+  profilePic: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  headerText: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  welcomeText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  nameText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+  },
+  icon: {
+    marginLeft: 15,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    margin: 20,
+    paddingHorizontal: 15,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+  },
+  fundingCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#6c5ce7',
+    borderRadius: 15,
+    padding: 20,
+    margin: 20,
+  },
+  fundingTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  startButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#00b894',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  startButtonText: {
+    color: '#fff',
+    marginRight: 5,
+  },
+  fundingImage: {
+    width: 100,
+    height: 100,
+  },
+  healthResources: {
+    margin: 20,
+  },
+  healthResourcesHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  healthResourcesTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  seeAllText: {
+    color: '#00b894',
+  },
+  resourcesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  resourceItem: {
+    width: '48%',
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 15,
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  resourceIcon: {
+    backgroundColor: '#e0e0ff',
+    borderRadius: 25,
+    padding: 10,
+    marginBottom: 10,
+  },
+  resourceText: {
+    textAlign: 'center',
+  },
+});
+
+export default HomeScreen;
+
+// ProfileScreen.js
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+
+const ProfileScreen = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://example.com/john-amara.jpg' }}
+            style={styles.profilePic}
+          />
+          <Text style={styles.name}>John Amara</Text>
+        </View>
+
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Ionicons name="heart" size={24} color="#6c5ce7" />
+            <Text style={styles.statValue}>215bpm</Text>
+            <Text style={styles.statLabel}>Heart rate</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Ionicons name="flame" size={24} color="#6c5ce7" />
+            <Text style={styles.statValue}>756cal</Text>
+            <Text style={styles.statLabel}>Calories</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Ionicons name="scale" size={24} color="#6c5ce7" />
+            <Text style={styles.statValue}>103lbs</Text>
+            <Text style={styles.statLabel}>Weight</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.moreDetails}>
+          <Text style={styles.moreDetailsText}>More details...</Text>
+        </TouchableOpacity>
+
+        {['My Saved', 'My Campaigns', 'Payment Method', 'FAQs', 'Logout'].map((item, index) => (
+          <TouchableOpacity key={index} style={styles.menuItem}>
+            <View style={styles.menuItemLeft}>
+              <View style={styles.menuItemIcon}>
+                <Ionicons 
+                  name={
+                    index === 0 ? 'heart-outline' :
+                    index === 1 ? 'list-outline' :
+                    index === 2 ? 'wallet-outline' :
+                    index === 3 ? 'help-circle-outline' :
+                    'log-out-outline'
+                  } 
+                  size={24} 
+                  color="#6c5ce7" 
+                />
+              </View>
+              <Text style={styles.menuItemText}>{item}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={24} color="#999" />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  header: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  profilePic: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#6c5ce7',
+    marginTop: 5,
+  },
+  statLabel: {
+    fontSize: 14,
+    color: '#666',
+  },
+  moreDetails: {
+    alignItems: 'flex-end',
+    marginRight: 20,
+    marginTop: 10,
+  },
+  moreDetailsText: {
+    color: '#00b894',
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    padding: 15,
+    marginHorizontal: 20,
+    marginTop: 15,
+    borderRadius: 10,
+  },
+  menuItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  menuItemIcon: {
+    backgroundColor: '#e0e0ff',
+    borderRadius: 20,
+    padding: 10,
+    marginRight: 15,
+  },
+  menuItemText: {
+    fontSize: 16,
+  },
+});
+
+export default ProfileScreen;
+
+// Add placeholder components for other screens
+const DiscoverScreen = () => <View><Text>Discover Screen</Text></View>;
+const AddScreen = () => <View><Text>Add Screen</Text></View>;
+const AnalysisScreen = () => <View><Text>Analysis Screen</Text></View>;
+
+export { DiscoverScreen, AddScreen, AnalysisScreen };
+
+```
+
+
+To use this React Native/Expo implementation:
+
+1. Set up a new Expo project:
+```
+expo init HealthApp
+cd HealthApp
+```
+
+2. Install the necessary dependencies:
+```
+expo install react-native-safe-area-context @react-navigation/native @react-navigation/bottom-tabs expo-font @expo/vector-icons
+```
+
+3. Replace the contents of your `App.js` file with the code provided in the artifact.
+
+4. Create a `screens` folder in your project root and add the individual screen components (HomeScreen.js, ProfileScreen.js, etc.) with their respective code.
+
+5. For the placeholder screens (Discover, Add, Analysis), you can either implement them later or use the provided placeholder components.
+
+6. Run the app:
+```
+expo start
+```
+
+This implementation includes:
+- A bottom tab navigation using `@react-navigation/bottom-tabs`
+- A Home screen with a welcome message, search bar, funding campaign card, and health resources grid
+- A Profile screen with user stats, and menu items
+- Placeholder components for Discover, Add, and Analysis screens
+- Use of `SafeAreaView` for proper layout on devices with notches
+- Custom styling to match the design in the images
+
+Note that you'll need to replace the placeholder image URIs with actual images for your app. Also, you may want to implement actual functionality for the various buttons and menu items.
+
+Let me know if you want to modify any part of the implementation or if you need help with adding more functionality!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################
+the lastest
+ Certainly! I'll create React Native/Expo components for the designs shown in the images. We'll implement two main screens: a Home screen with fund-raising cases and a Messages screen. Let's start with the implementation.
+
+
+
+```
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+
+import HomeScreen from './screens/HomeScreen';
+import DiscoverScreen from './screens/DiscoverScreen';
+import AddScreen from './screens/AddScreen';
+import AnalysisScreen from './screens/AnalysisScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import MessagesScreen from './screens/MessagesScreen';
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function HomeTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Discover') {
+            iconName = focused ? 'compass' : 'compass-outline';
+          } else if (route.name === 'Add') {
+            iconName = 'add-circle';
+            size = 40;
+            color = '#00b894';
+          } else if (route.name === 'Analysis') {
+            iconName = focused ? 'bar-chart' : 'bar-chart-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#6c5ce7',
+        tabBarInactiveTintColor: 'gray',
+        tabBarShowLabel: true,
+        tabBarStyle: {
+          display: 'flex',
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Discover" component={DiscoverScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Add" component={AddScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Analysis" component={AnalysisScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+    </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="MainTabs" component={HomeTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="Messages" component={MessagesScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
+}
+
+// HomeScreen.js
+import React from 'react';
+import { View, Text, Image, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+
+const FundRaisingCard = ({ title, target, raised, left, imageSource }) => (
+  <View style={styles.fundRaisingCard}>
+    <Image source={imageSource} style={styles.cardImage} />
+    <Text style={styles.cardTitle}>{title}</Text>
+    <View style={styles.progressBar}>
+      <View style={[styles.progress, { width: `${(raised / target) * 100}%` }]} />
+    </View>
+    <View style={styles.cardDetails}>
+      <Text style={styles.cardDetailText}>Target: ${target}</Text>
+      <Text style={styles.cardDetailText}>Raised: ${raised}</Text>
+      <Text style={styles.cardDetailText}>Left: ${left}</Text>
+    </View>
+  </View>
+);
+
+const HomeScreen = ({ navigation }) => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Image
+            source={require('../assets/john-amara.jpg')}
+            style={styles.profilePic}
+          />
+          <View style={styles.headerText}>
+            <Text style={styles.nameText}>John Amara</Text>
+            <Text style={styles.roleText}>Patient</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Messages')}>
+            <Ionicons name="chatbubble-outline" size={24} color="black" style={styles.icon} />
+          </TouchableOpacity>
+          <Ionicons name="notifications-outline" size={24} color="black" style={styles.icon} />
+        </View>
+
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search pharmacy, drugs, coach..."
+          />
+          <Ionicons name="mic-outline" size={20} color="#999" style={styles.micIcon} />
+        </View>
+
+        <Text style={styles.sectionTitle}>Fund Raising</Text>
+        <Text style={styles.sectionSubtitle}>Help save a life</Text>
+        <Text style={styles.urgentCases}>Urgent Cases</Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.urgentCasesScroll}>
+          <FundRaisingCard
+            title="Sickle Cell surgery"
+            target={1500}
+            raised={750}
+            left={750}
+            imageSource={require('../assets/sickle-cell.jpg')}
+          />
+          <FundRaisingCard
+            title="Helminth Infections"
+            target={1505}
+            raised={750}
+            left={755}
+            imageSource={require('../assets/helminth.jpg')}
+          />
+        </ScrollView>
+
+        <Text style={styles.otherCases}>Other Cases</Text>
+
+        <FundRaisingCard
+          title="Fund for my free mental health camp"
+          target={2000}
+          raised={634}
+          left={1366}
+          imageSource={require('../assets/mental-health.jpg')}
+        />
+
+        <FundRaisingCard
+          title="Mara Heart Surgery funding"
+          target={7000}
+          raised={3634}
+          left={3366}
+          imageSource={require('../assets/heart-surgery.jpg')}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+  },
+  profilePic: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  headerText: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  roleText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  icon: {
+    marginLeft: 15,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    margin: 20,
+    paddingHorizontal: 15,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+  },
+  micIcon: {
+    marginLeft: 10,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
+  sectionSubtitle: {
+    fontSize: 16,
+    color: '#666',
+    marginLeft: 20,
+    marginBottom: 10,
+  },
+  urgentCases: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#6c5ce7',
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  urgentCasesScroll: {
+    paddingLeft: 20,
+  },
+  otherCases: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  fundRaisingCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginRight: 15,
+    marginBottom: 15,
+    width: 250,
+  },
+  cardImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  progressBar: {
+    height: 5,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  progress: {
+    height: '100%',
+    backgroundColor: '#6c5ce7',
+    borderRadius: 5,
+  },
+  cardDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cardDetailText: {
+    fontSize: 12,
+    color: '#666',
+  },
+});
+
+export default HomeScreen;
+
+// MessagesScreen.js
+import React from 'react';
+import { View, Text, Image, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+
+const ContactItem = ({ name, message, time, unread, imageSource }) => (
+  <TouchableOpacity style={styles.contactItem}>
+    <Image source={imageSource} style={styles.contactImage} />
+    <View style={styles.contactInfo}>
+      <Text style={styles.contactName}>{name}</Text>
+      <Text style={styles.contactMessage}>{message}</Text>
+    </View>
+    <View style={styles.contactMeta}>
+      <Text style={styles.contactTime}>{time}</Text>
+      {unread > 0 && <View style={styles.unreadBadge}><Text style={styles.unreadText}>{unread}</Text></View>}
+    </View>
+  </TouchableOpacity>
+);
+
+const MessagesScreen = ({ navigation }) => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Message</Text>
+      </View>
+
+      <View style={styles.searchBar}>
+        <Ionicons name="search" size={20} color="#999" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search a Contacts"
+        />
+        <Ionicons name="mic-outline" size={20} color="#999" style={styles.micIcon} />
+      </View>
+
+      <Text style={styles.sectionTitle}>Active Now</Text>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.activeNowScroll}>
+        {['user1.jpg', 'user2.jpg', 'user3.jpg'].map((user, index) => (
+          <View key={index} style={styles.activeUser}>
+            <Image source={require(`../assets/${user}`)} style={styles.activeUserImage} />
+            <View style={styles.activeIndicator} />
+          </View>
+        ))}
+      </ScrollView>
+
+      <Text style={styles.sectionTitle}>Messages</Text>
+
+      <ScrollView>
+        <ContactItem
+          name="David Alen"
+          message="I will speak to him about it"
+          time="10 min"
+          unread={2}
+          imageSource={require('../assets/david.jpg')}
+        />
+        <ContactItem
+          name="Dr. Dalil"
+          message="Okay sir"
+          time="2h 5min"
+          unread={0}
+          imageSource={require('../assets/dr-dalil.jpg')}
+        />
+        <ContactItem
+          name="Big sis"
+          message="Yes sis, thanks a lot"
+          time="2h 34min"
+          unread={0}
+          imageSource={require('../assets/big-sis.jpg')}
+        />
+        <ContactItem
+          name="Edward"
+          message="Okay man thanks for the visit"
+          time="3h 4min"
+          unread={0}
+          imageSource={require('../assets/edward.jpg')}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    margin: 20,
+    paddingHorizontal: 15,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+  },
+  micIcon: {
+    marginLeft: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  activeNowScroll: {
+    paddingLeft: 20,
+  },
+  activeUser: {
+    marginRight: 15,
+  },
+  activeUserImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  activeIndicator: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: '#6c5ce7',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  contactItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  contactImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15,
+  },
+  contactInfo: {
+    flex: 1,
+  },
+  contactName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  
+```
